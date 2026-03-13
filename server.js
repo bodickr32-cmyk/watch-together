@@ -7,8 +7,19 @@ const app = express();
 const server = http.createServer(app);
 const io = socketIo(server);
 
+// Настройка MIME типов
+express.static.mime.define({'application/javascript': ['js']});
+
 // Раздаем статические файлы
-app.use(express.static(__dirname));
+app.use(express.static(__dirname, {
+  setHeaders: (res, filePath) => {
+    if (filePath.endsWith('.js')) {
+      res.setHeader('Content-Type', 'application/javascript');
+    } else if (filePath.endsWith('.css')) {
+      res.setHeader('Content-Type', 'text/css');
+    }
+  }
+}));
 
 app.get('/', (req, res) => {
   res.sendFile(path.join(__dirname, 'index.html'));
