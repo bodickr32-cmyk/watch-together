@@ -227,3 +227,39 @@ video.addEventListener('seeked', () => {
         });
     }
 });
+
+
+// Participants
+socket.on('participants', (participants) => {
+    const list = document.getElementById('participantsList');
+    list.innerHTML = '';
+    participants.forEach(p => {
+        const item = document.createElement('div');
+        item.className = 'participant-item';
+        item.innerHTML = `
+            <div class="participant-avatar">${p.username[0].toUpperCase()}</div>
+            <div class="participant-name">${p.username}</div>
+            <div class="participant-status"></div>
+        `;
+        list.appendChild(item);
+    });
+});
+
+// Reactions
+function sendReaction(emoji) {
+    socket.emit('reaction', { room: currentRoom, emoji, username: currentUser });
+    showReactionLocal(emoji);
+}
+
+function showReactionLocal(emoji) {
+    const reaction = document.createElement('div');
+    reaction.className = 'reaction-overlay';
+    reaction.textContent = emoji;
+    reaction.style.left = Math.random() * 80 + 10 + '%';
+    document.getElementById('videoContainer').appendChild(reaction);
+    setTimeout(() => reaction.remove(), 2000);
+}
+
+socket.on('reaction', (data) => {
+    showReactionLocal(data.emoji);
+});

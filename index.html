@@ -68,7 +68,20 @@
             </div>
 
             <div class="content-wrapper">
+                <div class="participants-panel">
+                    <div class="participants-header">👥 Участники</div>
+                    <div class="participants-list" id="participantsList"></div>
+                </div>
+
                 <div class="video-section">
+                    <div class="reactions-bar">
+                        <button class="reaction-btn" onclick="sendReaction('❤️')">❤️</button>
+                        <button class="reaction-btn" onclick="sendReaction('😂')">😂</button>
+                        <button class="reaction-btn" onclick="sendReaction('🔥')">🔥</button>
+                        <button class="reaction-btn" onclick="sendReaction('👍')">👍</button>
+                        <button class="reaction-btn" onclick="sendReaction('😮')">😮</button>
+                    </div>
+                    
                     <div class="source-selector" id="sourceSelector">
                         <div class="source-title">Выбери источник видео</div>
                         <div class="source-buttons">

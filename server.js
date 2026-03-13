@@ -46,6 +46,9 @@ io.on('connection', (socket) => {
     
     // Отправляем количество пользователей
     io.to(room).emit('userCount', rooms[room].users.length);
+    
+    // Отправляем список участников
+    io.to(room).emit('participants', rooms[room].users);
   });
 
   socket.on('sync', (data) => {
@@ -72,11 +75,17 @@ io.on('connection', (socket) => {
     if (rooms[room]) {
       rooms[room].users = rooms[room].users.filter(u => u.id !== socket.id);
       io.to(room).emit('userCount', rooms[room].users.length);
+      io.to(room).emit('participants', rooms[room].users);
       
       if (rooms[room].users.length === 0) {
         delete rooms[room];
       }
     }
+  });
+
+  socket.on('reaction', (data) => {
+    const { room, emoji } = data;
+    socket.to(room).emit('reaction', { emoji });
   });
 
   socket.on('disconnect', () => {
