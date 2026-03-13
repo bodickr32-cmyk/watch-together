@@ -19,21 +19,25 @@ const rooms = {};
 io.on('connection', (socket) => {
   console.log('Пользователь подключился:', socket.id);
 
-  socket.on('join', (roomCode) => {
-    socket.join(roomCode);
+  socket.on('join', (data) => {
+    const { room, username } = data;
+    socket.join(room);
     
-    if (!rooms[roomCode]) {
-      rooms[roomCode] = {
+    if (!rooms[room]) {
+      rooms[room] = {
         users: [],
         videoState: { position: 0, isPlaying: false }
       };
     }
     
-    rooms[roomCode].users.push(socket.id);
-    console.log(`Пользователь ${socket.id} присоединился к комнате ${roomCode}`);
+    rooms[room].users.push({ id: socket.id, username });
+    console.log(`${username} присоединился к комнате ${room}`);
     
     // Отправляем текущее состояние видео
-    socket.emit('sync', rooms[roomCode].videoState);
+    socket.emit('sync', rooms[room].videoState);
+    
+    // Отправляем количество пользователей
+    io.to(room).emit('userCount', rooms[room].users.length);
   });
 
   socket.on('sync', (data) => {
@@ -41,14 +45,13 @@ io.on('connection', (socket) => {
     
     if (rooms[room]) {
       rooms[room].videoState = { position, isPlaying };
-      // Отправляем всем в комнате кроме отправителя
       socket.to(room).emit('sync', { position, isPlaying });
     }
   });
 
   socket.on('message', (data) => {
-    const { room, text } = data;
-    io.to(room).emit('message', { text, sender: socket.id });
+    const { room, text, username } = data;
+    io.to(room).emit('message', { text, username });
   });
 
   socket.on('setSource', (data) => {
@@ -56,16 +59,27 @@ io.on('connection', (socket) => {
     socket.to(room).emit('setSource', { type, videoId, url });
   });
 
+  socket.on('leave', (room) => {
+    socket.leave(room);
+    if (rooms[room]) {
+      rooms[room].users = rooms[room].users.filter(u => u.id !== socket.id);
+      io.to(room).emit('userCount', rooms[room].users.length);
+      
+      if (rooms[room].users.length === 0) {
+        delete rooms[room];
+      }
+    }
+  });
+
   socket.on('disconnect', () => {
     console.log('Пользователь отключился:', socket.id);
     
-    // Удаляем из всех комнат
     Object.keys(rooms).forEach(roomCode => {
-      const index = rooms[roomCode].users.indexOf(socket.id);
+      const index = rooms[roomCode].users.findIndex(u => u.id === socket.id);
       if (index > -1) {
         rooms[roomCode].users.splice(index, 1);
+        io.to(roomCode).emit('userCount', rooms[roomCode].users.length);
         
-        // Удаляем пустые комнаты
         if (rooms[roomCode].users.length === 0) {
           delete rooms[roomCode];
         }

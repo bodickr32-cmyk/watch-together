@@ -4,472 +4,133 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>🎬 Watch Together</title>
-    <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
-        
-        body {
-            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
-            background: #0a0a0a;
-            color: #fff;
-            min-height: 100vh;
-        }
-        
-        .container {
-            max-width: 1200px;
-            margin: 0 auto;
-            padding: 20px;
-        }
-        
-        .header {
-            text-align: center;
-            padding: 40px 0;
-        }
-        
-        .title {
-            font-size: 48px;
-            font-weight: bold;
-            margin-bottom: 10px;
-        }
-        
-        .subtitle {
-            font-size: 18px;
-            color: #888;
-        }
-        
-        .join-screen {
-            max-width: 400px;
-            margin: 50px auto;
-        }
-        
-        .input {
-            width: 100%;
-            padding: 15px;
-            background: #1a1a1a;
-            border: 1px solid #333;
-            border-radius: 10px;
-            color: #fff;
-            font-size: 18px;
-            margin-bottom: 15px;
-        }
-        
-        .button {
-            width: 100%;
-            padding: 18px;
-            background: #7700ff;
-            border: none;
-            border-radius: 10px;
-            color: #fff;
-            font-size: 18px;
-            font-weight: bold;
-            cursor: pointer;
-            margin-bottom: 15px;
-        }
-        
-        .button:hover {
-            background: #6600dd;
-        }
-        
-        .button-secondary {
-            background: #333;
-        }
-        
-        .button-secondary:hover {
-            background: #444;
-        }
-        
-        .room-screen {
-            display: none;
-        }
-        
-        .room-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            padding: 20px;
-            background: #1a1a1a;
-            border-radius: 10px;
-            margin-bottom: 20px;
-        }
-        
-        .room-code {
-            font-size: 18px;
-            font-weight: bold;
-        }
-        
-        .leave-button {
-            color: #ff4444;
-            cursor: pointer;
-            font-size: 16px;
-        }
-        
-        .video-container {
-            background: #000;
-            border-radius: 10px;
-            overflow: hidden;
-            margin-bottom: 20px;
-        }
-        
-        video {
-            width: 100%;
-            height: 500px;
-            object-fit: contain;
-        }
-        
-        .chat-container {
-            background: #1a1a1a;
-            border-radius: 10px;
-            padding: 20px;
-            height: 300px;
-            display: flex;
-            flex-direction: column;
-        }
-        
-        .messages {
-            flex: 1;
-            overflow-y: auto;
-            margin-bottom: 15px;
-        }
-        
-        .message {
-            padding: 10px;
-            border-bottom: 1px solid #333;
-            font-size: 14px;
-        }
-        
-        .input-container {
-            display: flex;
-            gap: 10px;
-        }
-        
-        .chat-input {
-            flex: 1;
-            padding: 10px;
-            background: #0a0a0a;
-            border: 1px solid #333;
-            border-radius: 20px;
-            color: #fff;
-        }
-        
-        .send-button {
-            width: 40px;
-            height: 40px;
-            background: #7700ff;
-            border: none;
-            border-radius: 50%;
-            color: #fff;
-            font-size: 20px;
-            cursor: pointer;
-        }
-        
-        .source-selector {
-            background: #1a1a1a;
-            border-radius: 10px;
-            padding: 30px;
-            margin-bottom: 20px;
-        }
-        
-        .source-title {
-            font-size: 20px;
-            font-weight: bold;
-            text-align: center;
-            margin-bottom: 20px;
-        }
-        
-        .source-buttons {
-            display: flex;
-            gap: 15px;
-            justify-content: center;
-            margin-bottom: 20px;
-        }
-        
-        .source-btn {
-            background: #0a0a0a;
-            border: 2px solid #333;
-            border-radius: 10px;
-            padding: 20px;
-            color: #fff;
-            cursor: pointer;
-            transition: all 0.3s;
-            min-width: 120px;
-        }
-        
-        .source-btn:hover {
-            border-color: #7700ff;
-            background: #1a1a1a;
-        }
-        
-        .source-btn.active {
-            border-color: #7700ff;
-            background: #7700ff;
-        }
-        
-        .source-icon {
-            font-size: 40px;
-            margin-bottom: 10px;
-        }
-        
-        .source-input {
-            margin-top: 20px;
-        }
-        
-        .file-input {
-            display: none;
-        }
-    </style>
+    <link rel="stylesheet" href="style.css">
 </head>
 <body>
-    <div class="container">
-        <div class="header">
-            <div class="title">🎬 Watch Together</div>
-            <div class="subtitle">Смотри видео с друзьями</div>
+    <!-- Экран авторизации -->
+    <div class="auth-screen" id="authScreen">
+        <div class="auth-card">
+            <div class="auth-title">🎬 Watch Together</div>
+            <div class="auth-subtitle">Смотри видео с друзьями в реальном времени</div>
+            
+            <input type="text" class="input" id="usernameInput" placeholder="Твое имя">
+            <button class="button" onclick="login()">Войти</button>
         </div>
-        
-        <div class="join-screen" id="joinScreen">
-            <input type="text" class="input" id="roomCodeInput" placeholder="Введи код комнаты">
-            <button class="button" onclick="joinRoom()">Присоединиться</button>
-            <button class="button button-secondary" onclick="createRoom()">Создать комнату</button>
+    </div>
+
+    <!-- Главный экран -->
+    <div class="main-screen" id="mainScreen">
+        <div class="navbar">
+            <div class="logo">🎬 Watch Together</div>
+            <div class="user-info">
+                <div class="avatar" id="userAvatar"></div>
+                <span id="username"></span>
+            </div>
         </div>
-        
-        <div class="room-screen" id="roomScreen">
-            <div class="room-header">
-                <div class="room-code">Комната: <span id="currentRoom"></span></div>
-                <div class="leave-button" onclick="leaveRoom()">Выйти</div>
+
+        <div class="container">
+            <div class="hero">
+                <div class="hero-title">Создай комнату</div>
+                <div class="hero-subtitle">Или присоединись к существующей</div>
             </div>
-            
-            <div class="source-selector" id="sourceSelector">
-                <div class="source-title">Выбери источник видео:</div>
-                <div class="source-buttons">
-                    <button class="source-btn" onclick="selectSource('youtube')">
-                        <div class="source-icon">📺</div>
-                        <div>YouTube</div>
-                    </button>
-                    <button class="source-btn" onclick="selectSource('url')">
-                        <div class="source-icon">🔗</div>
-                        <div>Ссылка</div>
-                    </button>
-                    <button class="source-btn" onclick="selectSource('file')">
-                        <div class="source-icon">📁</div>
-                        <div>Файл</div>
-                    </button>
+
+            <div class="rooms-grid">
+                <div class="room-card create-room-card" onclick="createRoom()">
+                    <div class="create-icon">➕</div>
+                    <div>Создать комнату</div>
                 </div>
                 
-                <div class="source-input" id="youtubeInput" style="display: none;">
-                    <input type="text" class="input" id="youtubeUrl" placeholder="Вставь ссылку на YouTube видео">
-                    <button class="button" onclick="loadYoutube()">Загрузить</button>
-                </div>
-                
-                <div class="source-input" id="urlInput" style="display: none;">
-                    <input type="text" class="input" id="videoUrl" placeholder="Вставь прямую ссылку на видео (.mp4, .webm)">
-                    <button class="button" onclick="loadUrl()">Загрузить</button>
-                </div>
-                
-                <div class="source-input" id="fileInput" style="display: none;">
-                    <input type="file" class="file-input" id="videoFile" accept="video/*" onchange="loadFile()">
-                    <label for="videoFile" class="button">Выбрать файл</label>
-                </div>
-            </div>
-            
-            <div class="video-container" id="videoContainer" style="display: none;">
-                <video id="video" controls style="display: none;"></video>
-                <iframe id="youtubePlayer" style="display: none;" width="100%" height="500" frameborder="0" allowfullscreen></iframe>
-            </div>
-            
-            <div class="chat-container">
-                <div class="messages" id="messages"></div>
-                <div class="input-container">
-                    <input type="text" class="chat-input" id="messageInput" placeholder="Сообщение...">
-                    <button class="send-button" onclick="sendMessage()">➤</button>
+                <div class="room-card" onclick="showJoinModal()">
+                    <div class="room-code">Войти</div>
+                    <div class="room-users">Введи код комнаты</div>
                 </div>
             </div>
         </div>
     </div>
-    
+
+    <!-- Экран комнаты -->
+    <div class="room-screen" id="roomScreen">
+        <div class="navbar">
+            <div class="logo">🎬 Watch Together</div>
+            <div class="user-info">
+                <div class="avatar" id="roomUserAvatar"></div>
+                <span id="roomUsername"></span>
+            </div>
+        </div>
+
+        <div class="container">
+            <div class="room-header">
+                <div class="room-info">
+                    <div class="room-code-display">Комната: <span id="currentRoom"></span></div>
+                    <div class="room-users" id="roomUsers">👥 1 участник</div>
+                </div>
+                <button class="leave-button" onclick="leaveRoom()">Выйти</button>
+            </div>
+
+            <div class="content-wrapper">
+                <div class="video-section">
+                    <div class="source-selector" id="sourceSelector">
+                        <div class="source-title">Выбери источник видео</div>
+                        <div class="source-buttons">
+                            <button class="source-btn" onclick="selectSource('youtube')">
+                                <div class="source-icon">📺</div>
+                                <div>YouTube</div>
+                            </button>
+                            <button class="source-btn" onclick="selectSource('url')">
+                                <div class="source-icon">🔗</div>
+                                <div>Ссылка</div>
+                            </button>
+                            <button class="source-btn" onclick="selectSource('file')">
+                                <div class="source-icon">📁</div>
+                                <div>Файл</div>
+                            </button>
+                        </div>
+                        
+                        <div class="source-input" id="youtubeInput" style="display: none;">
+                            <input type="text" class="input" id="youtubeUrl" placeholder="Вставь ссылку на YouTube">
+                            <button class="button" onclick="loadYoutube()">Загрузить</button>
+                        </div>
+                        
+                        <div class="source-input" id="urlInput" style="display: none;">
+                            <input type="text" class="input" id="videoUrl" placeholder="Прямая ссылка на видео (.mp4, .webm)">
+                            <button class="button" onclick="loadUrl()">Загрузить</button>
+                        </div>
+                        
+                        <div class="source-input" id="fileInput" style="display: none;">
+                            <input type="file" class="file-input" id="videoFile" accept="video/*" onchange="loadFile()">
+                            <label for="videoFile" class="button">Выбрать файл</label>
+                        </div>
+                    </div>
+                    
+                    <div class="video-container" id="videoContainer" style="display: none;">
+                        <video id="video" controls style="display: none;"></video>
+                        <iframe id="youtubePlayer" style="display: none;" frameborder="0" allowfullscreen></iframe>
+                    </div>
+                </div>
+
+                <div class="chat-section">
+                    <div class="chat-header">💬 Чат</div>
+                    <div class="messages" id="messages"></div>
+                    <div class="chat-input-container">
+                        <input type="text" class="chat-input" id="messageInput" placeholder="Сообщение...">
+                        <button class="send-button" onclick="sendMessage()">➤</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Модалка для входа в комнату -->
+    <div class="modal" id="joinModal" style="display: none;">
+        <div class="modal-content">
+            <div class="modal-title">Войти в комнату</div>
+            <input type="text" class="input" id="joinRoomCode" placeholder="Введи код комнаты">
+            <button class="button" onclick="joinRoom()">Присоединиться</button>
+            <button class="button button-secondary" onclick="closeJoinModal()">Отмена</button>
+        </div>
+    </div>
+
     <script src="/socket.io/socket.io.js"></script>
-    <script>
-        const socket = io();
-        let currentRoom = '';
-        let currentSource = '';
-        const video = document.getElementById('video');
-        const youtubePlayer = document.getElementById('youtubePlayer');
-        
-        function createRoom() {
-            const code = Math.random().toString(36).substr(2, 6).toUpperCase();
-            document.getElementById('roomCodeInput').value = code;
-        }
-        
-        function joinRoom() {
-            const roomCode = document.getElementById('roomCodeInput').value.trim();
-            if (roomCode) {
-                currentRoom = roomCode;
-                socket.emit('join', roomCode);
-                document.getElementById('joinScreen').style.display = 'none';
-                document.getElementById('roomScreen').style.display = 'block';
-                document.getElementById('currentRoom').textContent = roomCode;
-            }
-        }
-        
-        function leaveRoom() {
-            document.getElementById('joinScreen').style.display = 'block';
-            document.getElementById('roomScreen').style.display = 'none';
-            document.getElementById('roomCodeInput').value = '';
-            document.getElementById('sourceSelector').style.display = 'block';
-            document.getElementById('videoContainer').style.display = 'none';
-            currentRoom = '';
-            currentSource = '';
-        }
-        
-        function selectSource(type) {
-            document.querySelectorAll('.source-btn').forEach(btn => btn.classList.remove('active'));
-            event.target.closest('.source-btn').classList.add('active');
-            
-            document.getElementById('youtubeInput').style.display = 'none';
-            document.getElementById('urlInput').style.display = 'none';
-            document.getElementById('fileInput').style.display = 'none';
-            
-            if (type === 'youtube') {
-                document.getElementById('youtubeInput').style.display = 'block';
-            } else if (type === 'url') {
-                document.getElementById('urlInput').style.display = 'block';
-            } else if (type === 'file') {
-                document.getElementById('fileInput').style.display = 'block';
-            }
-        }
-        
-        function loadYoutube() {
-            const url = document.getElementById('youtubeUrl').value.trim();
-            if (!url) return;
-            
-            let videoId = '';
-            if (url.includes('youtube.com/watch?v=')) {
-                videoId = url.split('v=')[1].split('&')[0];
-            } else if (url.includes('youtu.be/')) {
-                videoId = url.split('youtu.be/')[1].split('?')[0];
-            }
-            
-            if (videoId) {
-                currentSource = 'youtube';
-                youtubePlayer.src = `https://www.youtube.com/embed/${videoId}?enablejsapi=1`;
-                youtubePlayer.style.display = 'block';
-                video.style.display = 'none';
-                document.getElementById('sourceSelector').style.display = 'none';
-                document.getElementById('videoContainer').style.display = 'block';
-                
-                socket.emit('setSource', { room: currentRoom, type: 'youtube', videoId });
-            } else {
-                alert('Неверная ссылка на YouTube');
-            }
-        }
-        
-        function loadUrl() {
-            const url = document.getElementById('videoUrl').value.trim();
-            if (!url) return;
-            
-            currentSource = 'url';
-            video.src = url;
-            video.style.display = 'block';
-            youtubePlayer.style.display = 'none';
-            document.getElementById('sourceSelector').style.display = 'none';
-            document.getElementById('videoContainer').style.display = 'block';
-            
-            socket.emit('setSource', { room: currentRoom, type: 'url', url });
-        }
-        
-        function loadFile() {
-            const file = document.getElementById('videoFile').files[0];
-            if (!file) return;
-            
-            currentSource = 'file';
-            const url = URL.createObjectURL(file);
-            video.src = url;
-            video.style.display = 'block';
-            youtubePlayer.style.display = 'none';
-            document.getElementById('sourceSelector').style.display = 'none';
-            document.getElementById('videoContainer').style.display = 'block';
-        }
-        
-        function sendMessage() {
-            const input = document.getElementById('messageInput');
-            const text = input.value.trim();
-            if (text) {
-                socket.emit('message', { room: currentRoom, text });
-                input.value = '';
-            }
-        }
-        
-        document.getElementById('messageInput').addEventListener('keypress', (e) => {
-            if (e.key === 'Enter') sendMessage();
-        });
-        
-        socket.on('sync', (data) => {
-            if (currentSource === 'youtube') return;
-            video.currentTime = data.position;
-            if (data.isPlaying) {
-                video.play();
-            } else {
-                video.pause();
-            }
-        });
-        
-        socket.on('setSource', (data) => {
-            if (data.type === 'youtube') {
-                currentSource = 'youtube';
-                youtubePlayer.src = `https://www.youtube.com/embed/${data.videoId}?enablejsapi=1`;
-                youtubePlayer.style.display = 'block';
-                video.style.display = 'none';
-                document.getElementById('sourceSelector').style.display = 'none';
-                document.getElementById('videoContainer').style.display = 'block';
-            } else if (data.type === 'url') {
-                currentSource = 'url';
-                video.src = data.url;
-                video.style.display = 'block';
-                youtubePlayer.style.display = 'none';
-                document.getElementById('sourceSelector').style.display = 'none';
-                document.getElementById('videoContainer').style.display = 'block';
-            }
-        });
-        
-        socket.on('message', (msg) => {
-            const messagesDiv = document.getElementById('messages');
-            const messageDiv = document.createElement('div');
-            messageDiv.className = 'message';
-            messageDiv.textContent = msg.text;
-            messagesDiv.appendChild(messageDiv);
-            messagesDiv.scrollTop = messagesDiv.scrollHeight;
-        });
-        
-        video.addEventListener('play', () => {
-            if (currentRoom && currentSource !== 'youtube') {
-                socket.emit('sync', {
-                    room: currentRoom,
-                    position: video.currentTime,
-                    isPlaying: true
-                });
-            }
-        });
-        
-        video.addEventListener('pause', () => {
-            if (currentRoom && currentSource !== 'youtube') {
-                socket.emit('sync', {
-                    room: currentRoom,
-                    position: video.currentTime,
-                    isPlaying: false
-                });
-            }
-        });
-        
-        video.addEventListener('seeked', () => {
-            if (currentRoom && currentSource !== 'youtube') {
-                socket.emit('sync', {
-                    room: currentRoom,
-                    position: video.currentTime,
-                    isPlaying: !video.paused
-                });
-            }
-        });
-    </script>
+    <script src="app.js"></script>
 </body>
 </html>
